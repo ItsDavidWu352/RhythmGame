@@ -1,0 +1,368 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+/** root allows code to be re-used inside of the CSS file */
+:root {
+  /* color choices for notes and results */
+  --perfect-color: rgba(255, 101, 229, .8);
+  --good-color: rgba(82, 236, 51, .8);
+  --bad-color: rgba(207, 53, 53, .8);
+  --miss-color: rgba(199, 184, 184, .8);
+  /* colors used mainly for the results screen */
+  --maxcombo-color: rgba(0, 110, 255, .8);
+  --score-color: rgba(240, 202, 36, .8);
+  /* colors used for the keys */
+  --hit-color: rgba(255, 255, 255, .8);
+  --key-red: rgba(254, 45, 87, 1);
+  --key-blue: rgba(28, 121, 228, 1);
+  --key-orange: rgba(240, 128, 60, 1);
+  /* colors used for key press effect */
+  --keypress-red: linear-gradient(to top, rgba(254, 45, 87, .6), rgba(254, 45, 87, 0));
+  --keypress-blue: linear-gradient(to top, rgba(28, 121, 228, .6), rgba(28, 121, 228, 0));
+  --keypress-orange: linear-gradient(to top, rgba(240, 128, 60, .6), rgba(240, 128, 60, 0));
+}
+article#gameplayAreaContainer {
+  /* google font + fallback fonts */
+  font-family: NotoSerifNormal;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  overflow: hidden;
+  position: fixed;
+  /* used as fallback if the picture doesn't load properly */
+  background-color: black;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+article.backgroundImageToggle {
+  /* background image during gameplay */
+  background-image: url("../img/background/taikoBeatBackground.png");
+}
+article#gameplayAreaContainer.revealGameToggleTest {
+  display: none;
+}
+
+/** track (2 lane) setup Start */
+.game {
+  position: relative;
+  display: flex;
+  flex: 0 0 calc(60% / 2);
+  flex-direction: column;
+  max-width: 100%;
+  background: black;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* hit related styles */
+.hit {
+  position: absolute;
+  width: 50%;
+  height: 20%;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.hit__combo {
+  width: 100%;
+  height: 100%;
+  font-size: 5rem;
+  color: rgba(255, 199, 126, .8);
+}
+.hit__accuracy {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  font-size: 4rem;
+}
+.hit__accuracy--perfect {
+  color: var(--perfect-color);
+  opacity: 0;
+  font-size: 2.8rem;
+  animation: fade 1s;
+}
+.hit__accuracy--good {
+  color: var(--good-color);
+  opacity: 0;
+  animation: fade 1s;
+}
+.hit__accuracy--bad {
+  color: var(--bad-color);
+  opacity: 0;
+  animation: fade 1s;
+}
+.hit__accuracy--miss {
+  color: var(--miss-color);
+  opacity: 0;
+  animation: fade 1s;
+}
+
+/* lanes Styles */
+.track-container {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+}
+/* .track affects all lanes */
+.track {
+  position: relative;
+  /* flex: 0 0 calc(100% / 7); */
+  flex: 0 0 calc(100% / 2);
+  border-right: 1px solid grey;
+  /* default background color of track lanes */
+  background-color: black;
+}
+.track:first-child {
+  /* left Border line of track */
+  border-left: 1px solid grey;
+}
+/* background lane (Left) */
+.track:nth-child(1) {
+  background-color: rgba(126, 130, 255, 0.28);
+}
+/* background lane (Right) */
+.track:nth-child(2) {
+  background-color: rgba(255, 126, 126, 0.28);
+}
+
+/* key press styles */
+.key-container {
+  display: flex;
+  justify-content: center;
+  /* flex: 0 0 8%; */
+  flex: 0 0 1.5rem;
+}
+.key {
+  /* flex: 0 0 calc(100% / 7); */
+  flex: 0 0 calc(100% / 2);
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+  text-align: center;
+  position: relative;
+}
+.keypress {
+  position: absolute;
+  width: 100%;
+  height: 280%;
+  top: -280%;
+  display: none;
+}
+.key--red {
+  background: var(--key-red);
+}
+.key--blue {
+  background: var(--key-blue);
+}
+/*! Orange is not used */
+.key--orange {
+  background: var(--key-orange);
+}
+.key span {
+  font-weight: bold;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  padding-top: .5rem;
+}
+
+/*? Note: to color notes, got to songSettings.js and change the note color isnide the desired song's variable */
+/* note styles */
+.note {
+  position: absolute;
+  width: 100%;
+  height: 1.5rem;
+  top: -1.5rem;
+}
+
+/* effects for when the player presses on the falling notes at the right time */
+.key__hit {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: 0 0;
+  background: var(--hit-color);
+  opacity: 0;
+  /*? Should the hit center effect be a square? */
+  border-radius: 50%;
+  animation: scaleFade 1s;
+}
+.key__hit:after {
+  /* empty string to let the effect play */
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--hit-color);
+  width: 100%;
+  height: 100%;
+  /*? Should the border effect of a hit note be a square? */
+  border-radius: 50%;
+  animation: scaleBorder 1s;
+}
+.keypress--red {
+  background-image: var(--keypress-red);
+}
+.keypress--blue {
+  background-image: var(--keypress-blue);
+}
+/*! Orange is not used */
+.keypress--orange {
+  background-image: var(--keypress-orange);
+}
+/** track (2 lane) setup Start */
+
+/*! Currently not being used */
+.menu {
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 calc(100% / 2);
+  font-size: 1em;
+  color: white;
+  text-align: center;
+  justify-content: space-around;
+  transition: all 1s;
+  /* inserts the background image to the  */
+  /* background-image: url("../img/background/taikoBeatBackground.png");
+  background-size: contain;
+  background-repeat: no-repeat; */
+}
+.menu__config {
+  display: flex;
+  justify-content: space-around;
+}
+
+/** Time Styles Start */
+div.timerContainer {
+  display: block;
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-left: 1%;
+  padding-right: 2%;
+  position: absolute;
+  font-size: 10vh;
+  opacity: 0;
+  transition: all 1s;
+  border-bottom-right-radius: 15px;
+}
+p.timerTitle {
+  font-size: 5vh;
+  transition: all 1s;
+}
+.summary__timer {
+  display: block;
+  font-size: 8vh;
+  transition: all 1s;
+}
+/** Time Styles End */
+
+/*! Progress Bar. Currently not being used */
+.summary {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  left: 50%;
+  color: white;
+  text-align: center;
+  z-index: -1;
+  /* inserts the background image to the  */
+  /* background-image: url("../img/background/taikoBeatBackground.png");
+  background-size: contain;
+  background-repeat: no-repeat; */
+}
+.summaryProgress {
+  position: absolute;
+  top: 13%;
+  left: -72%;
+  transform: translate(-50%, -50%);
+  width: 52%;
+  font-size: 8rem;
+  opacity: 1;
+  transition: all 2s;
+}
+.summaryCurrentProgress {
+  background-color: aqua;
+  height: .1em;
+  /* edit the width with JavaScript to make it dynamic */
+  width: 0%;
+  transition: all 2s;
+}
+
+/** Score Styles Start */
+.scoreContainer {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  transition: 1s all;
+}
+div.scoreHolder {
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-right: 1%;
+  padding-left: 2%;
+  border-bottom-left-radius: 15px;
+  float: right;
+}
+p.scoreTitle {
+  font-size: 5vh;
+  text-align: left;
+}
+p.playerScore {
+  font-size: 8vh;
+  text-align: right;
+}
+/** Score Style End */
+
+/*! Video background style DO NOT CHANGE UNLESS ITS IMPORTANT */
+video#backgroundGameplayVideo {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+}
+
+/* keyframes for animation */
+@keyframes moveDown {
+  0% { top: -1.5rem; }
+  98% { top: 100%; opacity: 1; }
+  100% { top: 105%; opacity: 0; }
+}
+@keyframes moveDownFade {
+  0% { top: -1.5rem; }
+  60% { opacity: 1; }
+  80% { opacity: 0; }
+  98% { top: 100%; opacity: 0; }
+  100% { top: 105%; opacity: 0; }
+}
+@keyframes fade {
+  10% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes scaleFade {
+  from {opacity: 1;}
+  to {
+    opacity: 0;
+    width: 3rem;
+    height: 3rem;
+  }
+}
+@keyframes scaleBorder {
+  100% {
+    width: 5rem;
+    height: 5rem;
+    border: 2px solid transparent;
+  }
+}
+
+/*! not used since Progress Bar is not used */
+@keyframes progressBarFill {
+  from {width: 1%;}
+  to {width: 100%}
+}

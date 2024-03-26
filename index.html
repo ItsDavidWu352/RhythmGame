@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rhythm Game</title>
+  <link rel="stylesheet" href="css/finalProject.css">
+  <link rel="stylesheet" href="css/game.css">
+  <!--* The script will be inserted in a "defer" state, allowing the HTML file to be processed first -->
+  <!-- Documentation for jquery-3.7.1.min.js: https://api.jquery.com/ -->
+  <script src="libraries/jquery-3.7.1.min.js"defer></script>
+  <!-- Documentation for jquery.csv.min.js: https://github.com/evanplaice/jquery-csv, https://github.com/evanplaice/jquery-csv/blob/main/docs/api.md -->
+  <script src="libraries/jquery.csv.min.js" defer></script>
+  <!-- Home page functionality -->
+  <script src="js/finalProject.js" defer></script>
+  <!-- songsheets for the game to use -->
+  <script src="js/songSettings.js" defer></script>
+  <!-- Gameplay logic script -->
+  <script src="js/game.js" defer></script>
+</head>
+<body>
+  <section id="controllerConnectedContainer" class="priorityMessage">
+    <div class="messageContainer">
+      <p class="controllerConnectedMessage">Controller Connected</p>
+    </div>
+  </section>
+  <section id="controllerDisconnectedContainer" class="priorityMessage">
+    <div class="messageContainer">
+      <p class="controllerDisconnectedMessage">Controller Disconnected</p>
+    </div>
+  </section>
+  <!--* loadingScreen shows up during after the player chooses a song to play and when the gameplay finishes. -->
+  <!--! I suggest to not try to move this element -->
+  <!--? backgroundImage style is inside the finalProject.js file (inside of the function replaceLoadingImage(thumbnail) ) -->
+  <div id="loadingScreen" class="loadingScreenContainer">
+    <div class="LoadingTextHolder">
+      <h1 class="loadingText">Now Loading...</h1>
+    </div>
+  </div>
+
+  <!--* resultsScreen shows up when the player reaches the end of the game. The inside tags can stil be styled inside the game.css file-->
+  <!--! I suggest to try to not remove any classes or IDs since it affects the JavaScript. -->
+  <div id="resultsScreen" class="resultsScreenContainer">
+    <div class="summaryResult">
+      <h2 class="resultHeading h2GameEdit">Clear</h2>
+      <!--* the following divs have different properties based on the second class name -->
+      <div class="resultAccuracy perfect">
+        <p class="accuracyHeading">Perfect:</p>
+        <!-- perfectCount spits out the player's perfect note score -->
+        <p class="accuracyCount perfectCount"></p>
+      </div>
+      <div class="resultAccuracy good">
+        <p class="accuracyHeading">Good:</p>
+        <!-- goodCount spits out the player's good note score -->
+        <p class="accuracyCount goodCount"></p>
+      </div>
+      <div class="resultAccuracy bad">
+        <p class="accuracyHeading">Bad:</p>
+        <!-- badCount spits out the player's bad note score -->
+        <p class="accuracyCount badCount"></p>
+      </div>
+      <div class="resultAccuracy miss">
+        <p class="accuracyHeading">Miss:</p>
+        <!-- missCount spits out the player's miss note score -->
+        <p class="accuracyCount missCount"></p>
+      </div>
+      <div class="resultAccuracy combo">
+        <p class="accuracyHeading">Max Combo:</p>
+        <!-- comboCount spits out the player's max combo -->
+        <p class="accuracyCount comboCount"></p>
+      </div>
+      <div class="resultAccuracy score">
+        <p class="accuracyHeading">Score:</p>
+        <!-- scoreCount spits out the player's score -->
+        <p class="accuracyCount scoreCount"></p>
+      </div>
+    </div>
+  </div>
+
+  <!--* mainScreen is the Homepage container when the person first visits the index.hmtl-->
+  <div id="mainScreen">
+    <!--* titleSection includes the title name -->
+    <section id="titleSection">
+      <h1 class="titlePlaceholder">Taiko Beat</h1>
+    </section>
+    <!--* Basic buttons for title screen -->
+    <section class="generalButtonsContainer">
+      <ul class="generalButtonHolder">
+        <!--* startButton for showing the "playSongContainer" section. can be moved anywhere, but update the JavaScript code afterwards -->
+        <li><button class="startButton">Start</button></li>
+        <li><button class="optionButton">Options</button></li>
+        <!--* settingsContainer includes toggable buttons for the player to use -->
+        <section id="settingsContainer" class="evenSpacing">
+          <div class="informationPlaceholder">
+            <h2 class="settingsTitle">Options</h2>
+            <div id="settingsButtons">
+              <div class="speedHolder">
+                <h3 class="information">Speed</h3>
+                <div class="config__speed">
+                  <button class="btn btn--small btn--selected">1x</button>
+                  <button class="btn btn--small">2x</button>
+                  <button class="btn btn--small">3x</button>
+                </div>
+              </div>
+              <div class="complicationHolder">
+                <h3 class="information">Complication</h3>
+                <div class="config__challenge">
+                  <button class="btn btn--small">Fade</button>
+                </div>
+              </div>
+              <div class="MVHolder">
+                <h3 class="information">Motion Video</h3>
+                <div class="config__MV">
+                  <button class="btn btn--small">MV</button>
+                </div>
+              </div>
+              <div class="randomizeHolder">
+                <h3 class="information">Randomize</h3>
+                <div class="config__randomize">
+                  <button class="btn btn--small">Randomize</button>
+                </div>
+              </div>
+              <div class="audioVisualizerHolder">
+                <h3 class="information">Audio Visualizer</h3>
+                <div class="config__audioVisualizer">
+                  <button class="btn btn--small">Audio Visualizer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <li><button class="instructionButton">Instructions</button></li>
+        <!--* informationContainer includes the description and instruction of the game -->
+        <section id="informationContainer" class="evenSpacing">
+          <div class="informationPlaceholder">
+            <h2 class="helpTitle">How to Play</h2>
+            <p class="information">Hit the falling notes at the sound of the music's beat. Use the sticks and hit the left and right drums as the notes fall down on the screen.</p>
+            <p class="information">Press the play button to show the music list. Hover over a thumbnail to preview the music choice.</p>
+            <p class="information"><b>Drum Controls</b>: Left drum controls the left side and the right drum controls the right side.</p>
+            <p class="information"><b>Keyboard Controls</b>: Hit the note on the left using the <b>S</b> key, and hit the note on the right using the <b>D</b> key.</p>
+            <p class="information"><b>Let's start playing!</b></p>
+            <h2 class="helpTitle">Setting Instructions</h2>
+            <ul class="informationList information">
+              <li><b class="speedInstructions">Speed</b>: How fast you want the notes to drop from above</li>
+              <li><b class="complicationInstructions">Complication</b>: Sets a challenge during gameplay</li>
+              <li><b class="MVInstructions">MV</b>: Turns on a Motion Video on selected eligible songs</li>
+              <li><b class="randomizeInstructions">Randomize</b>: Randomizes note placement</li>
+            </ul>
+          </div>
+        </section>
+        <li><button class="exitButton">Exit</button></li>
+      </ul>
+    </section>
+
+    <!--* titleSection includes the title name -->
+    <!-- <section id="titleSection">
+      <h1 class="titlePlaceholder">Taiko Beat</h1>
+    </section> -->
+    <!--* informationContainer includes the description and instruction of the game -->
+    <!-- <section id="informationContainer" class="evenSpacing">
+      <div class="informationPlaceholder">
+        <h2 class="helpTitle">How to Play</h2>
+        <p class="information">Hit the falling notes at the sound of the music's beat. Use the sticks and hit the left and right drums as the notes fall down on the screen.</p>
+        <p class="information">Press the play button to show the music list. Hover over a thumbnail to preview the music choice.</p>
+        <p class="information"><b>Drum Controls</b>: Left drum controls the left side and the right drum controls the right side.</p>
+        <p class="information"><b>Keyboard Controls</b>: Hit the note on the left using the <b>S</b> key, and hit the note on the right using the <b>D</b> key.</p>
+        <p class="information"><b>Let's start playing!</b></p>
+        <h2 class="helpTitle">Setting Instructions</h2>
+        <ul class="informationList information">
+          <li><b class="speedInstructions">Speed</b>: How fast you want the notes to drop from above</li>
+          <li><b class="complicationInstructions">Complication</b>: Sets a challenge during gameplay</li>
+          <li><b class="MVInstructions">MV</b>: Turns on a Motion Video on selected eligible songs</li>
+          <li><b class="randomizeInstructions">Randomize</b>: Randomizes note placement</li>
+        </ul>
+      </div>
+    </section> -->
+    <!--* settingsContainer includes toggable buttons for the player to use -->
+    <!-- <section id="settingsContainer" class="evenSpacing">
+      <div class="informationPlaceholder">
+        <h2 class="settingsTitle">Settings</h2>
+        <div id="settingsButtons">
+          <div class="speedHolder">
+            <h3 class="information">Speed</h3>
+            <div class="config__speed">
+              <button class="btn btn--small btn--selected">1x</button>
+              <button class="btn btn--small">2x</button>
+              <button class="btn btn--small">3x</button>
+            </div>
+          </div>
+          <div class="complicationHolder">
+            <h3 class="information">Complication</h3>
+            <div class="config__challenge">
+              <button class="btn btn--small">Fade</button>
+            </div>
+          </div>
+          <div class="MVHolder">
+            <h3 class="information">Motion Video</h3>
+            <div class="config__MV">
+              <button class="btn btn--small">MV</button>
+            </div>
+          </div>
+          <div class="randomizeHolder">
+            <h3 class="information">Randomize</h3>
+            <div class="config__randomize">
+              <button class="btn btn--small">Randomize</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!--* playSongContainer includes all the selectable songs the player can use -->
+    <!--! Be very careful with messing with playSongContainer and its children. The inside of the section is strictly made for the JavaScript to read and should not have its classes or IDs removed-->
+    <section id="playSongContainer" class="evenSpacing">
+      <!-- informationPlaceHolder contains the song thumbnails -->
+      <div class="informationPlaceholder">
+        <!--? How to create a songContainer to show a playable song. Feel free to copy this code to use on a new song -->
+        <!-- 
+        <div class="songContainer">
+          <p>Name of Song Goes Here</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/nameOfYourImageGoesHere.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfoAlt noSelect">MV not available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        -->
+        <!--? End of code example -->
+        <!--! newly created songs must be placed right below the last song included -->
+        <!--* Song 1 w/ references -->
+        <div class="songContainer">
+          <p>Tutorial</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/Smug.png" alt="Cover art for the song">
+          </figure>
+          <!-- "MVInfoAlt noSelect" explains if the song has a Motion Video or not -->
+          <!-- class can either be "MVInfo noSelect" (MV Available) or "MVInfoAlt noSelect" (MV not Available) -->
+          <p class="MVInfoAlt noSelect">MV not available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song 2 -->
+        <div class="songContainer">
+          <p>JAM! X Carnival Nigth Zone</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/Carnival_Night_Zone_X_Jam.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfo noSelect">MV available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song Unused -->
+        <!-- <div class="songContainer">
+          <p>NIKKE: Shop Sound Track</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/NIKKE_Shop_Static.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfoAlt noSelect">MV not available</p>
+          <button class="playSongButton">Play Song</button>
+        </div> -->
+        <!--* Song 3 -->
+        <div class="songContainer">
+          <p>Racing into the Night (夜に駆ける)</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/intoTheNight.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfoAlt noSelect">MV not available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song 4 -->
+        <div class="songContainer">
+          <p>Ddu-Du Ddu-Du</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/DUU-DU.jpeg" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfo noSelect">MV available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song 5 -->
+        <div class="songContainer">
+          <p>Trip Innocent Of D</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/Trip_Inocent_Of_D.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfo noSelect">MV available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song 6 -->
+        <div class="songContainer">
+          <p>Idol (アイドル)</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/Idol2.png" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfo noSelect">MV available</p>
+          <button class="playSongButton">Play Song</button>
+        </div>
+        <!--* Song 7 -->
+        <div class="songContainer">
+          <p>DRIVE</p>
+          <figure class="songCoverContainer">
+            <img class="songCover" src="img/previewImages/DRIVE.jpg" alt="Cover art for the song">
+          </figure>
+          <p class="MVInfoAlt noSelect">MV not available</p>
+          <p class="randomizerInfo noSelect">Randomizer available</p>
+          <button id="playDRIVE" class="playSongButton">Play Song</button>
+        </div>
+        <!--* End of Song Thumbnails -->
+      </div>
+    </section>
+  </div>
+
+  <!--* GameplayAreaContainer shows up after the player picks a song -->
+  <!--! DO NOT MOVE GameplayAreaContainer AND ITS CHILDREN AWAY FROM THIS SPOT!!!-->
+  <article id="gameplayAreaContainer" class="revealGameToggleTest backgroundImageToggle">
+    <!-- creates a video tag to setup background MV that plays during gameplay -->
+    <video muted id="backgroundGameplayVideo">
+      <!-- video JS code gets injected here -->
+    </video>
+
+    <div id="content">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- timerContainer includes the song's timer during gameplay -->
+    <div class="timerContainer">
+      <p class="timerTitle">Timer:</p>
+      <!-- time gets updated on summary__timer -->
+      <div class="summary__timer"></div>
+    </div>
+    <!-- ScoreContainer contains the player's score during gameplay -->
+    <div class="scoreContainer">
+      <div class="scoreHolder">
+        <p class="scoreTitle">Score:</p>
+        <!-- player's score gets updated on playerScore -->
+        <p class="playerScore">0</p>
+      </div>
+    </div>
+    <!-- game div contains the baord the user interacts with  -->
+    <div class="game">
+      <div class="hit">
+        <div class="hit__combo"></div>
+        <div class="hit__accuracy"></div>
+      </div>
+      <div class="track-container"></div>
+      <!--* Key identifiers -->
+      <div class="key-container">
+        <!-- s key -->
+        <div class="key key--s key--blue">
+          <div class="keypress keypress--blue"></div>
+        </div>
+        <!-- d key -->
+        <div class="key key--d key--red">
+          <div class="keypress keypress--red"></div>
+        </div>
+      </div>
+    </div>
+    <!-- summaryContainer includes the progress bar (alternate timer) during gameplay -->
+    <!--! Currently not implemented -->
+    <div id="summaryContainer" class="summary">
+      <div class="summaryProgress">
+        <div id="musicProgress" class="summaryCurrentProgress"></div>
+      </div>
+    </div>
+  </article>
+
+  <!--* startButton for showing the "playSongContainer" section. can be moved anywhere, but update the JavaScript code afterwards -->
+  <!-- <button class="startButton">Start</button> -->
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reduce time</title>
+  <!-- Documentation for jquery-3.7.1.min.js: https://api.jquery.com/ -->
+  <script src="libraries/jquery-3.7.1.min.js"defer></script>
+  <!-- Documentation for jquery.csv.min.js: https://github.com/evanplaice/jquery-csv, https://github.com/evanplaice/jquery-csv/blob/main/docs/api.md -->
+  <script src="libraries/jquery.csv.min.js" defer></script>
+  <script src="js/reduceTimer.js" defer></script>
+  <style>
+    input, select, textarea {
+      color: #dbdbdb;
+    }
+    div {
+      line-height: normal;
+    }
+    p {
+      color: #dbdbdb;
+    }
+  </style>
+</head>
+<body style="background-color: #282828;">
+  <input type="file" name="file" id="file" style="display: block;">
+  <button id="testButton">press me to test hardcoded csv file target</button>
+  <div>
+    <p>change text height below:</p>
+    <button onclick="changeTextHeight()">1X</button>
+    <button onclick="changeTextHeight2x()">2X</button>
+  </div>
+  <p style="color: #d36b6b; display: block;">Make sure the .csv file has the tab spaces (arrow-like spaces) replaced with a comma (,) for this page to spit out correct data</p>
+
+  <div id="1" style="display: block; max-width: 40%; float: left; margin-right: 20%;">
+    <p style="color: #00d900;">values (with reduction)<br></p>
+    <div id="output2" style="color: #00d900;"></div>
+  </div>
+
+  <div id="2" style="display: block; max-width: 40%; float: left;">
+    <p style="color: #dbd700;">values (without reduction)<br></p>
+    <div id="output" style="color: #dbd700;"></div>
+  </div>
+
+</body>

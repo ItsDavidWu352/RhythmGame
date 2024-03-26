@@ -1,0 +1,684 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+/** finds a font inside the url directory */
+@font-face {
+  font-family: NotoSerifNormal;
+  src:
+    url("../fonts/Noto_Serif/NotoSerif-Regular.ttf");
+}
+@font-face {
+  font-family: GamePlayed;
+  src:
+    url("../fonts/Game_Played/GamePlayed-vYL7.ttf");
+}
+@font-face {
+  font-family: SuperLegendBoy;
+  src:
+    url("../fonts/Super_Legend_Boy/SuperLegendBoy-4w8Y.ttf");
+}
+/** background color for main page */
+body {
+  background-color: rgb(229, 232, 255);
+  background-image: url("../img/background/mainmenubackground.png");
+  /* resize to fit browser window */
+  background-size: 100vw 100vh;
+  /* the settings below change the style of the image */
+  /* background-size: contain; */
+  background-repeat: repeat;
+}
+/* Name of the game Styles */
+h1.titlePlaceholder {
+  font-family: 'GamePlayed';
+  text-align: center;
+  font-size: 10em;
+  margin-bottom: 0.3em;
+  animation: ColorAnimationAlt 20s infinite;
+  animation-timing-function: ease-in;
+}
+/* h2 general Title styles */
+h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: .5em;
+}
+/* Affects all but the first h2.helpTitle */
+h2.helpTitle:not(:first-child) {
+  margin-top: .5em;
+}
+/* general "Minor Title" Styles */
+h3.information {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: .5em;
+  font-weight: normal;
+  margin-top: .5em;
+}
+
+/** Controller Message styles Start */
+section.priorityMessage {
+  display: none;
+  position: fixed;
+  z-index: 100000;
+  background-color: rgb(49, 49, 49);
+  margin-top: 1.5em;
+  border-radius: .5em;
+  /* centers message */
+  left: 50%;
+  transform: translate(-50%);
+}
+.messageContainer {
+  font-family: 'NotoSerifNormal';
+  font-weight: bold;
+  text-align: center;
+  padding: .5em 1em;
+}
+.controllerConnectedMessage {
+  color: rgb(25, 209, 37);
+  font-size: 3em;
+}
+.controllerDisconnectedMessage {
+  color: rgb(209, 25, 25);
+  font-size: 3em;
+}
+/** Controller Message styles End */
+
+/** loading screen styles Start */
+.loadingScreenContainer {
+  visibility: hidden;
+  opacity: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  /* change the z-index to bring the screen on top default: 1*/
+  z-index: 10;
+  /* fallback background-image style */
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 60vh, rgb(0, 0, 0) 90vh);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transition: visibility 1s ease-in-out, opacity 1s ease-in-out;
+}
+.loadingScreenVisibility {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 1s ease-in-out, opacity 1s ease-in-out;
+}
+h1.loadingText {
+  font-family: sans-serif, "NotoSerifNormal";
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 2.5vh 0;
+  margin-top: 85vh;
+}
+/** loading screen styles End*/
+
+/* this class prevents players from scrolling inside an Element */
+.noScroll {
+  overflow-y: hidden;
+}
+
+/** Results Screen Container Start */
+.resultsScreenContainer {
+  visibility: hidden;
+  opacity: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(52, 50, 47);
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  /* change the z-index to bring the screen on top default: 1*/
+  z-index: 9;
+
+  /* background-image: url("../img/previewImages/NIKKE_Shop_Static.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat; */
+
+  transition: visibility 1s ease-in-out, opacity 1s ease-in-out;
+  
+}
+.summary__result {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0;
+  transition: all 2s;
+}
+.summaryResult {
+  font-family: 'SuperLegendBoy';
+  opacity: 0;
+  transition: all 2s ease-in-out;
+}
+h2.resultHeading {
+  color: aliceblue;
+}
+h2.h2GameEdit {
+  padding: 1rem;
+  text-transform: uppercase;
+}
+
+/* General Style headings and text format */
+.resultHeading {
+  font-size: 3rem;
+}
+.resultAccuracy {
+  /* display: flex; */
+  text-align: center;
+  font-size: 2rem;
+  padding: 1rem;
+}
+.accuracyHeading {
+  display: inline-block;
+  text-align: left;
+}
+.accuracyCount {
+  display: inline-block;
+  text-align: left;
+  /* allows whitespace to appear */
+  white-space: pre;
+}
+
+/* color text in results */
+/*? Check the root styles inside game.css to see color choices */
+.perfect {
+  color: var(--perfect-color);
+}
+.good {
+  color: var(--good-color);
+}
+.bad {
+  color: var(--bad-color);
+}
+.miss {
+  color: var(--miss-color);
+}
+.combo {
+  color: var(--maxcombo-color);
+}
+.score {
+  color: var(--score-color);
+}
+
+/*? This is used inside the game.js file  */
+.result__heading {
+  font-size: 3rem;
+}
+.result__accuracy {
+  display: flex;
+  font-size: 2rem;
+  padding: 1rem;
+}
+.accuracy__heading {
+  flex: none;
+  /* flex: 0 0 45%; */
+  text-align: left;
+}
+.accuracy__count {
+  flex: initial;
+  /* flex: 0 0 45%; */
+  text-align: left;
+  /* allows whitespace to appear */
+  white-space: pre;
+}
+
+/* used for toggling visibility inside JavaScript */
+.resultsScreenVisibility {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 1s ease-in-out, opacity 1s ease-in-out;
+}
+/** End Screen Container end */
+
+/** Main Screen (begining screen) Container Start */
+div#mainScreen {
+  display: unset;
+}
+/* font for main screen */
+div#mainScreen p {
+  /* font name "NotoSerif" is used from @font-face*/
+  font-family: "NotoSerifNormal";
+}
+/* spaces out sections */
+section.evenSpacing {
+  margin-bottom: .5em;
+}
+/* information block (1st block) */
+section#informationContainer div.informationPlaceholder {
+  display: block;
+  margin: 0 2.5%;
+  padding: 1em;
+  border: 5px solid rgb(28, 177, 225);
+  border-radius: 8px;
+}
+/* regular text Styles fallback*/
+p.information {
+  text-align: center;
+  font-size: 1em;
+  margin-top: 1em;
+}
+/* Description text styles */
+div.informationPlaceholder p {
+  font-size: 1.5em;
+}
+
+/* Setting Instructions */
+ul.informationList {
+  list-style: none;
+  margin: 0;
+  margin-bottom: .5em;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: none;
+}
+ul.informationList li {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 1em;
+}
+li b.speedInstructions {
+  color: rgb(21 120 42);
+}
+li b.complicationInstructions {
+  color: rgb(199 40 40);
+}
+li b.MVInstructions {
+  color: rgb(95, 31, 155);
+}
+/** Main Screen (begining screen) Container End*/
+
+/** Settings Container Start */
+section#settingsContainer {
+  display: none;
+  /* opacity: 0; */
+  /* visibility: hidden; */
+  /* transition: display 1s ease-in-out, opacity 1s ease-in-out */
+}
+section#settingsContainer div.informationPlaceholder {
+  background-color: rgba(240, 248, 255, 0.75);
+  display: block;
+  margin: 0 2.5%;
+  padding: 1em;
+  border: 5px solid rgb(147, 147, 147);
+  border-radius: 8px;
+}
+section#settingsContainer div.informationPlaceholder div.settingsButton {
+  display: inline-block;
+  width: 250px;
+  height: auto;
+  padding: 15px;
+  margin: 10px 20px 10px;
+}
+div.informationPlaceholder p {
+  text-align: center;
+  font-size: 30px;
+  padding-bottom: 15px;
+}
+
+/* button general styles */
+.btn:link, .btn:visited {
+  display: inline-block;
+  border: 1px solid white;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all .2s;
+  color: white;
+  /* margin: 0 auto; */
+  transition: all .2s;
+}
+.btn:hover {
+  background: rgb(126, 126, 126);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+.btn:active {
+  background: white;
+  color: black;
+}
+.btn--small {
+  width: 7rem;
+  height: 2.25rem;
+  /* border-radius: 50%; */
+  /* line-height: 7rem; */
+  /* vertical-align: center; */
+  /* margin-top: 1rem; */
+}
+/*! Currently not used */
+.btn--primary {
+  /* border-radius: 1rem; */
+  padding: 0.5rem 2rem;
+}
+
+/* Settings text and button styles */
+.config__speed {
+  text-align: center;
+}
+.config__speed .btn--selected {
+  background: rgb(130, 202, 49);
+  color: black;
+}
+.config__challenge {
+  text-align: center;
+}
+.config__challenge .btn--selected {
+  background: rgb(179, 54, 54);
+  color: rgb(255, 255, 255);
+}
+.config__MV {
+  text-align: center;
+}
+.config__MV .btn--selected {
+  background: rgb(82, 49, 202);
+  color: rgb(255, 255, 255);
+}
+.config__randomize {
+  text-align: center;
+}
+.config__randomize .btn--selected {
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+.config__audioVisualizer {
+  text-align: center;
+}
+.config__audioVisualizer .btn--selected {
+  background: rgb(210, 224, 16);
+  color: rgb(0, 0, 0);
+}
+/** Settings Container End */
+
+/** Song Preview Section Start */
+section#playSongContainer {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: display 1s ease-in-out, opacity 1s ease-in-out
+}
+/* holds all of the songs together */
+section#playSongContainer div.informationPlaceholder {
+  background-color: rgba(240, 248, 255, 0.75);
+  display: block;
+  margin: 0 2.5%;
+  padding: 1em;
+  /*? should I delete this border */
+  border: 5px solid rgb(62, 178, 53);
+  border-radius: 8px;
+}
+
+/* each song preview is inside a div.sonContainer  */
+section#playSongContainer div.informationPlaceholder div.songContainer {
+  display: inline-block;
+  width: 250px;
+  height: auto;
+  padding: 15px;
+  margin: 10px 20px 10px;
+}
+div.songContainer p {
+  text-align: center;
+  font-size: 30px;
+  padding-bottom: 15px;
+}
+
+/* preview image styles */
+figure {
+  box-shadow: 14px 14px 18px -6px rgba(0, 0, 0, 0.75);
+}
+figure.songCoverContainer, img.songCover {
+  display: block;
+  height: 200px;
+  width: 200px;
+  margin: auto;
+  border-radius: 20px;
+}
+figure.songCoverContainer {
+  filter: sepia(30%) grayscale(100%);
+  transition: filter .2s ease-in-out;
+}
+figure.colorizedThumbnail {
+  filter: sepia(0%) grayscale(0%);
+  cursor: crosshair;
+  transition: filter .2s ease-in-out;
+}
+figure.BadAppleColor {
+  filter: invert(1);
+  transition: filter .2s ease-in-out;
+}
+
+/* Text Styles to show bits of information (Toggable in JS) */
+p.MVInfo {
+  margin-top: .5em;
+  color: rgb(123, 86, 172);
+  font-size: 1.7em !important;
+}
+p.MVInfoAlt {
+  margin-top: .5em;
+  color: rgb(172, 86, 86);
+  font-size: 1.7em !important;
+}
+p.randomizerInfo {
+  margin-top: .5em;
+  color: rgb(75, 75, 75);
+  font-size: 1.3em !important;
+}
+p.audioVisualizerInfo {
+  margin-top: .5em;
+  color: rgb(75, 75, 75);
+  font-size: 1.3em !important;
+}
+/* prevents mouse highlight and select */
+.noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* play button styles */
+button.playSongButton, button.startButton {
+  display: block;
+  font-size: 20px;
+  background-color: green;
+  color: aliceblue;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  border: 0;
+  border-radius: 50%;
+  transition: color .5s ease-in-out, background-color .5s ease-in-out;
+}
+button.playSongButton:hover, button.startButton:hover {
+  cursor: pointer;
+  animation: ColorAnimation 3s infinite;
+  animation-timing-function: ease-in
+}
+button.startButton {
+  margin-bottom: 1em;
+  width: 7em;
+  height: 3em;
+  border-radius: 6px;
+}
+
+button.optionButton {
+  display: block;
+  font-size: 20px;
+  background-color: green;
+  color: aliceblue;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  border: 0;
+  border-radius: 50%;
+  transition: color .5s ease-in-out, background-color .5s ease-in-out;
+}
+button.optionButton:hover {
+  cursor: pointer;
+  animation: ColorAnimation 3s infinite;
+  animation-timing-function: ease-in
+}
+button.optionButton {
+  margin-bottom: 1em;
+  width: 7em;
+  height: 3em;
+  border-radius: 6px;
+}
+section#informationContainer {
+  display: none;
+  /* opacity: 0; */
+  /* visibility: hidden; */
+  /* transition: display 1s ease-in-out, opacity 1s ease-in-out */
+}
+/* holds all of the songs together */
+section#informationContainer div.informationPlaceholder {
+  background-color: rgba(240, 248, 255, 0.75);
+  display: block;
+  margin: 0 2.5%;
+  padding: 1em;
+  /*? should I delete this border */
+  border: 5px solid rgb(62, 178, 53);
+  border-radius: 8px;
+}
+
+/* each song preview is inside a div.sonContainer  */
+section#informationContainer div.informationPlaceholder div.informationContainer {
+  display: inline-block;
+  width: 250px;
+  height: auto;
+  padding: 15px;
+  margin: 10px 20px 10px;
+}
+div.informationContainer p {
+  text-align: center;
+  font-size: 30px;
+  padding-bottom: 15px;
+}
+button.instructionButton {
+  display: block;
+  font-size: 20px;
+  background-color: green;
+  color: aliceblue;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  border: 0;
+  border-radius: 50%;
+  transition: color .5s ease-in-out, background-color .5s ease-in-out;
+}
+button.instructionButton:hover {
+  cursor: pointer;
+  animation: ColorAnimation 3s infinite;
+  animation-timing-function: ease-in
+}
+button.instructionButton {
+  margin-bottom: 1em;
+  width: 7em;
+  height: 3em;
+  border-radius: 6px;
+}
+button.exitButton {
+  display: block;
+  font-size: 20px;
+  background-color: green;
+  color: aliceblue;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding: 20px;
+  width: 100px;
+  height: 100px;
+  border: 0;
+  border-radius: 50%;
+  transition: color .5s ease-in-out, background-color .5s ease-in-out;
+}
+button.exitButton:hover {
+  cursor: pointer;
+  animation: ColorAnimation 3s infinite;
+  animation-timing-function: ease-in
+}
+button.exitButton {
+  margin-bottom: 1em;
+  width: 7em;
+  height: 3em;
+  border-radius: 6px;
+}
+/** Song Preview Section End */
+
+#content {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+}
+canvas {
+  display: block;
+}
+#canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+/** Color Animation for buttons on homepage */
+@keyframes ColorAnimation {
+  0%, 100%  {
+    background-color: rgba(128, 0, 128, 0.5);
+    color: aliceblue;
+  }
+  20%   {
+    background-color: rgba(255, 0, 0, 0.5);
+    color: aliceblue;
+  }
+  40%  {
+    background-color: rgba(255, 255, 0, 0.5);
+    color: black;
+  }
+  60% {
+    background-color: rgba(0, 128, 0, 0.5);
+    color: aliceblue;
+  }
+  80%  {
+    background-color: rgba(0, 0, 255, 0.5);
+    color: aliceblue;
+  }
+}
+@keyframes ColorAnimationAlt {
+  0%, 100%  {
+    background-color: rgb(128, 0, 128);
+    color: aliceblue;
+  }
+  20%   {
+    background-color: rgb(167, 0, 0);
+    color: aliceblue;
+  }
+  40%  {
+    background-color: rgb(160, 160, 0);
+    color: black;
+  }
+  60% {
+    background-color: rgb(0, 128, 0);
+    color: aliceblue;
+  }
+  80%  {
+    background-color: rgb(0, 0, 201);
+    color: aliceblue;
+  }
+}
